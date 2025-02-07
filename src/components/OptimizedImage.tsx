@@ -1,7 +1,8 @@
 import Image, { ImageProps } from "next/image";
 
-interface OptimizedImageProps extends Omit<ImageProps, "loader" | "blurDataURL" | "width" | "height"> {
-  blurDataURL?: string; 
+interface OptimizedImageProps
+  extends Omit<ImageProps, "loader" | "blurDataURL"> {
+  blurDataURL?: string;
 }
 
 const OptimizedImage: React.FC<OptimizedImageProps> = ({
@@ -14,12 +15,14 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
   sizes = "(max-width: 600px) 100vw, (max-width: 1200px) 50vw, 33vw",
   blurDataURL,
   fill = false, 
+  width = fill ? undefined : 300, 
+  height = fill ? undefined : 300, 
   ...props
 }) => {
   const shouldUseBlur = placeholder === "blur" && blurDataURL;
 
   return (
-    <div className={`relative w-full h-full ${fill ? "absolute" : ""} ${className}`}>
+    <div className={`relative ${fill ? "w-full h-full" : ""} ${className}`}>
       <Image
         src={src}
         alt={alt}
@@ -28,8 +31,9 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
         placeholder={shouldUseBlur ? "blur" : "empty"}
         blurDataURL={shouldUseBlur ? blurDataURL : undefined}
         sizes={sizes}
-        fill={fill} 
-        className="rounded-lg shadow-md transition-opacity duration-300 ease-in-out hover:opacity-90 object-contain"
+        fill={fill}
+        width={fill ? undefined : width} 
+        height={fill ? undefined : height} 
         {...props}
       />
     </div>

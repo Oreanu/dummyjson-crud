@@ -4,7 +4,6 @@ import {
   Card,
   CardHeader,
   CardContent,
-  CardTitle,
   CardFooter,
 } from "@/components/ui/card";
 import {
@@ -17,17 +16,16 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { Badge } from "@/components/ui/badge";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Trash, Pencil, Loader2 } from "lucide-react";
 import { useDeleteProduct } from "@/hooks/useDeleteProduct";
 import { Product } from "@/types/interface/product";
 import OptimizedImage from "../OptimizedImage";
+import BackIcon from "../svgs/BackIcon";
 
 interface Props {
   product: Product | null;
 }
+
 export default function ProductDetails({ product }: Props) {
   const router = useRouter();
   const [isDialogOpen, setDialogOpen] = React.useState(false);
@@ -40,7 +38,7 @@ export default function ProductDetails({ product }: Props) {
   if (!product) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <p className="text-red-500 text-center">⚠️ Product not found.</p>
+        <p className="text-red-500 text-center text-xl font-semibold">⚠️ Product not found.</p>
       </div>
     );
   }
@@ -48,80 +46,64 @@ export default function ProductDetails({ product }: Props) {
   const isOutOfStock = product.stock === 0;
 
   return (
-    <div className="flex justify-center items-center h-screen">
-      <Card className="w-full max-w-xl shadow-md -mt-16">
-        <CardHeader className="flex flex-row w-full items-center justify-between">
+    <div className="flex justify-center items-center min-h-screen py-6 px-0 lg:p-6">
+      <Card className="w-full max-w-2xl px-2 lg:px-6 lg:py-4 !shadow-none border border-[var(--border-color)] bg-white !rounded-[20px] lg:!rounded-[32px]">
+
+        <CardHeader className="flex items-center justify-between border-b w-full !px-0">
+          <div className="flex flex-col lg:flex-row items-center w-full">
+          <div className="w-full lg:w-max mb-4 lg:mb-0">
           <Button
-            variant="ghost"
-            className="bg-primary/5"
-            onClick={() => router.push("/")}
-          >
-            <ArrowLeft className="w-5 h-5" />
-          </Button>
-          <Badge variant="outline">{product.category || "Uncategorized"}</Badge>
+              onClick={() => router.back()}
+              className="h-[32px] w-[32px] lg:w-[40px] lg:h-[40px] flex items-center justify-center rounded-full shadow-none bg-[#FBFBFB] hover:bg-[#FBFBFB] transition !p-0"
+            >
+              <BackIcon className="!h-[32px] !w-[32px] lg:!w-[40px] lg:!h-[40px] " />
+            </Button>
+          </div>
+            <h2 className="text-[24px] lg:text-[34px] leading-snug pt-2 font-bold text-center flex-1">
+            {product.title}
+            </h2>
+          </div>
         </CardHeader>
 
-        <CardContent className="space-y-1">
-          <AspectRatio
-            ratio={16 / 9}
-            className="rounded-md overflow-hidden w-3/4 mx-auto"
-          >
-            {product.thumbnail ? (
-              <OptimizedImage
-                src={product.thumbnail}
-                alt={product.title}
-                fill
-                className="w-full h-full object-contain"
-              />
-            ) : (
-              <div className="h-48 w-full bg-gray-200 flex items-center justify-center text-gray-500">
-                No Image Available
-              </div>
-            )}
-          </AspectRatio>
+        <CardContent className="space-y-4">
+          <div className="relative w-full h-[300px] flex justify-center items-center ">
+          <OptimizedImage
+            src={product.thumbnail}
+            alt={product.title}
+            width={300}
+            height={300}
+            className="object-contain rounded-lg "
+          />
+        </div>
 
-          <CardTitle className="text-lg font-semibold text-center">
-            {product.title}
-          </CardTitle>
-          <p className="text-gray-600 text-sm line-clamp-2">
-            {product.description}
-          </p>
-
-          <div className="grid grid-cols-2 gap-2 text-sm text-gray-700">
-            <p>
-              <span className="font-semibold">Brand:</span>{" "}
-              {product.brand || "Unknown"}
-            </p>
-            <p>
-              <span className="font-semibold">Stock:</span>{" "}
-              {isOutOfStock ? "Out of Stock" : `${product.stock} left`}
-            </p>
-            <p>
-              <span className="font-semibold">SKU:</span> {product.sku || "N/A"}
-            </p>
-            <p>
-              <span className="font-semibold">Warranty:</span>{" "}
-              {product.warrantyInformation || "No warranty"}
-            </p>
+          <div className="text-center mt-4">
+            <p className="text-gray-700 text-sm lg:text-md mt-2 font-medium">{product.description}</p>
           </div>
 
-          <div className="flex justify-between items-center mt-2">
-            <span className="text-xl font-semibold text-[#FD5319]">
+          <div className="grid grid-cols-2 gap-4 text-gray-800 text-sm font-medium border-t pt-4">
+            <p><span className="font-bold">Brand:</span> {product.brand || "Unknown"}</p>
+            <p><span className="font-bold">Stock:</span> {isOutOfStock ? "Out of Stock" : `${product.stock} left`}</p>
+            <p><span className="font-bold">SKU:</span> {product.sku || "N/A"}</p>
+            <p><span className="font-bold">Warranty:</span> {product.warrantyInformation || "No warranty"}</p>
+            <p><span className="font-bold">Weight:</span> {product.weight ? `${product.weight}kg` : "N/A"}</p>
+            <p><span className="font-bold">Return Policy:</span> {product.returnPolicy || "Not specified"}</p>
+            <p><span className="font-bold">Shipping Info:</span> {product.shippingInformation || "Not available"}</p>
+            <p><span className="font-bold">Availability:</span> {product.availabilityStatus || "Unknown"}</p>
+          </div>
+
+          <div className="flex justify-between items-center mt-4">
+            <span className="text-3xl font-bold text-[#FD5319]">
               ${product.price?.toFixed(2) || "N/A"}
             </span>
-            <Badge variant="secondary">
-              {product.availabilityStatus || "Unknown"}
-            </Badge>
           </div>
         </CardContent>
 
-        <CardFooter className="flex justify-between">
+        <CardFooter className="flex justify-between border-t pt-4 px-0 gap-4 ">
           <Button
-            className="flex items-center gap-2"
+            className="flex items-center gap-2 px-4 py-2  text-white rounded-lg w-full !h-[52px] !mt-4 !text-[16px]"
             onClick={() => router.push(`/product/edit/${product.id}`)}
             disabled={isOutOfStock}
           >
-            <Pencil className="w-4 h-4" />
             Edit
           </Button>
 
@@ -129,51 +111,28 @@ export default function ProductDetails({ product }: Props) {
             <DialogTrigger asChild>
               <Button
                 variant="destructive"
-                className="flex items-center gap-2"
+                className="flex items-center gap-2  px-4 py-2 w-full !h-[52px] !text-[16px] !mt-4 bg-red-600 text-white rounded-lg hover:bg-red-700"
                 disabled={isOutOfStock}
               >
-                <Trash className="w-4 h-4" />
                 Delete
               </Button>
             </DialogTrigger>
-            <DialogContent className="p-6">
+            <DialogContent className="p-6 bg-white rounded-lg shadow-lg">
               <DialogHeader>
-                <DialogTitle className="text-lg font-semibold text-gray-900">
+                <DialogTitle className="text-xl font-semibold text-gray-900">
                   Delete Product
                 </DialogTitle>
-                <p className="text-gray-600 text-sm mt-2">
-                  Are you sure you want to delete this product? This action{" "}
-                  <span className="text-red-600 font-semibold">cannot</span> be
-                  undone.
+                <p className="text-gray-600 text-md mt-2">
+                  Are you sure you want to delete this product? This action
+                  <span className="text-red-600 font-bold"> cannot</span> be undone.
                 </p>
               </DialogHeader>
-              <DialogFooter>
+              <DialogFooter className="flex gap-4">
                 <DialogClose asChild>
-                  <Button
-                    variant="outline"
-                    className="hover:bg-gray-100"
-                    onClick={() => setDialogOpen(false)}
-                  >
-                    Cancel
-                  </Button>
+                  <Button variant="outline">Cancel</Button>
                 </DialogClose>
-                <Button
-                  variant="destructive"
-                  className="flex items-center gap-2 hover:bg-red-700"
-                  onClick={() => deleteMutation.mutate()}
-                  disabled={deleteMutation.isPending}
-                >
-                  {deleteMutation.isPending ? (
-                    <>
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                      Deleting...
-                    </>
-                  ) : (
-                    <>
-                      <Trash className="w-4 h-4" />
-                      Confirm
-                    </>
-                  )}
+                <Button variant="destructive" onClick={() => deleteMutation.mutate()} disabled={deleteMutation.isPending}>
+                  {deleteMutation.isPending ? "Deleting..." : "Confirm"}
                 </Button>
               </DialogFooter>
             </DialogContent>

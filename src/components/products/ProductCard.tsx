@@ -1,13 +1,11 @@
 "use client";
 
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 import { useDeleteProduct } from "@/hooks/useDeleteProduct";
 import {
@@ -21,129 +19,128 @@ import {
 } from "@/components/ui/dialog";
 import { Product } from "@/types/interface/product";
 import { Badge } from "@/components/ui/badge";
-import { Eye,  Loader2, Pencil, Trash } from "lucide-react";
 import React from "react";
 import OptimizedImage from "../OptimizedImage";
+import EditIcon from "@/components/svgs/EditIcon";
+import DeleteIcon from "@/components/svgs/DeleteIcon";
+import ForwardIcon from "@/components/svgs/ForwardIcon";
+import { useRouter } from "next/navigation";
 
 export function ProductCard({ product }: { product: Product }) {
   const isOutOfStock = product.stock === 0;
-  const [isDialogOpen, setDialogOpen] = React.useState(false); 
+  const [isDialogOpen, setDialogOpen] = React.useState(false);
+
+  const router = useRouter();
 
   const deleteMutation = useDeleteProduct(product.id, {
-    onSuccessCallback: () => setDialogOpen(false), 
+    onSuccessCallback: () => setDialogOpen(false),
   });
 
-  return (
-    <Card className="group overflow-hidden transition-all hover:shadow-lg rounded-xl border border-gray-200 shadow-lg bg-card">
-      <CardHeader className="relative w-full h-52 overflow-hidden">
-        <div className="relative w-full h-full overflow-hidden">
-          <div className="absolute top-3 right-3">
-            {isOutOfStock ? (
-              <Badge variant="destructive">Out of Stock</Badge>
-            ) : (
-              <Badge variant="outline" className="bg-[#139654] text-white sticky z-10">
-                In Stock
-              </Badge>
-            )}
-          </div>
+  const handleCardClick = (e: React.MouseEvent) => {
+    if (e.target instanceof HTMLElement && e.target.closest("button")) {
+      return;
+    }
 
-          <div className="relative w-full h-full transform transition-transform duration-300 ease-in-out group-hover:scale-105">
-            <OptimizedImage src={product.thumbnail} alt={product.title} fill className="object-contain rounded-t-lg" />
+    router.push(`/product/${product.id}`);
+  };
+
+  return (
+    <Card
+      onClick={handleCardClick}
+      className="shadow-none !p-0 overflow-hidden !border-[var(--border-color)] !cursor-pointer"
+    >
+      <CardHeader className="relative w-full h-72 bg-[var(--background-light-2)] flex flex-col justify-between !pl-0 !pt-4 !pr-0">
+        <div className="flex justify-between items-start w-full !pr-4">
+          <Badge
+            variant="outline"
+            className="bg-[var(--success-color)] !shadow-none text-white px-3 py-1 !rounded-t-[23px] !rounded-l-[0px] !border-0 !rounded-r-[23px] !rounded-b-[23px] !h-[32px] !text-[12px] uppercase sticky z-10"
+          >
+            {isOutOfStock ? "Out of Stock" : "In Stock"}
+          </Badge>
+          <div className="flex gap-2 sticky z-10">
+            <Button
+              onClick={(e) => {
+                e.stopPropagation();
+                router.push(`/product/edit/${product.id}`);
+              }}
+              className="w-[48px] h-[48px] flex items-center justify-center rounded-full shadow-none bg-[#FBFBFB] hover:bg-[#FBFBFB] transition !p-0"
+            >
+              <EditIcon className="!w-[48px] !h-[48px]" />
+            </Button>
+
+            <Dialog open={isDialogOpen} onOpenChange={setDialogOpen}>
+              <DialogTrigger asChild>
+                <Button
+                  onClick={(e) => e.stopPropagation()}
+                  className="w-[48px] h-[48px] flex items-center justify-center bg-[#FBFBFB] hover:bg-[#FBFBFB] shadow-none rounded-full transition !p-0"
+                >
+                  <DeleteIcon className="!w-[48px] !h-[48px]" />
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="p-6">
+                <DialogHeader>
+                  <DialogTitle className="text-lg font-semibold text-gray-900">
+                    Delete Product
+                  </DialogTitle>
+                  <p className="text-gray-600 text-sm mt-2">
+                    Are you sure you want to delete this product? This action{" "}
+                    <span className="text-red-600 font-semibold">cannot</span>{" "}
+                    be undone.
+                  </p>
+                </DialogHeader>
+                <DialogFooter className="flex justify-between mt-4">
+                  <DialogClose asChild>
+                    <Button variant="outline" className="hover:bg-gray-100">
+                      Cancel
+                    </Button>
+                  </DialogClose>
+                  <Button
+                    variant="destructive"
+                    className="flex items-center gap-2 hover:bg-red-700"
+                    onClick={() => deleteMutation.mutate()}
+                    disabled={deleteMutation.isPending || isOutOfStock}
+                  >
+                    {deleteMutation.isPending ? "Deleting..." : "Confirm"}
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
           </div>
+        </div>
+        <div className="relative w-full h-[350px] flex justify-center items-center">
+          <OptimizedImage
+            src={product.thumbnail}
+            alt={product.title}
+            width={300}
+            height={300}
+            className="object-contain rounded-lg -mt-20"
+          />
         </div>
       </CardHeader>
 
       <CardContent className="p-4">
-        <div className="flex justify-between items-center">
-          <CardTitle className="text-lg font-semibold text-[#EC6031]">
-            {product.title}
-          </CardTitle>
-        </div>
-        <p className="text-gray-600 text-sm mt-1">
+        <h3 className="text-lg font-semibold text-[var(--orange-color-prep)]  uppercase">
+          {product.title}
+        </h3>
+        <p className="text-sm mt-1 text-[#5C5C5C] font-thin">
           {product.description.substring(0, 50)}...
         </p>
-        <p className="text-lg font-bold text-gray-800 mt-2">
-          ${product.price.toFixed(2)}
-        </p>
+        <div className="h-[1px] w-full bg-[#F0F0F0] mt-4"></div>
       </CardContent>
 
       <CardFooter className="flex justify-between px-4 pb-4 items-center">
-        <Link href={`/product/${product.id}`} passHref>
-          <Button variant="ghost" className="flex items-center gap-2 text-gray-700 hover:bg-gray-100">
-            <Eye className="w-4 h-4" />
-            View
-          </Button>
-        </Link>
-
-        <Link href={`/product/edit/${product.id}`} passHref>
-          <Button
-            variant="outline"
-            className={`flex items-center gap-2 ${
-              isOutOfStock ? "opacity-50 cursor-not-allowed" : "hover:bg-[#FFB515] hover:text-black"
-            }`}
-            disabled={isOutOfStock}
-          >
-            <Pencil className="w-4 h-4" />
-            Edit
-          </Button>
-        </Link>
-
-        <Dialog open={isDialogOpen} onOpenChange={setDialogOpen}>
-          <DialogTrigger asChild>
-            <Button
-              variant="destructive"
-              className={`flex items-center gap-2 transition-all hover:bg-red-600 hover:text-white ${
-                isOutOfStock ? "opacity-50 cursor-not-allowed" : ""
-              }`}
-              disabled={isOutOfStock}
-            >
-              <Trash className="w-4 h-4" />
-              Delete
-            </Button>
-          </DialogTrigger>
-
-          <DialogContent className="p-6">
-            <DialogHeader>
-              <DialogTitle className="text-lg font-semibold text-gray-900">
-                Delete Product
-              </DialogTitle>
-              <p className="text-gray-600 text-sm mt-2">
-                Are you sure you want to delete this product? This action{" "}
-                <span className="text-red-600 font-semibold">cannot</span> be undone.
-              </p>
-            </DialogHeader>
-
-            <DialogFooter className="flex justify-between mt-4">
-              <DialogClose asChild>
-                <Button
-                  variant="outline"
-                  className="hover:bg-gray-100"
-                  onClick={() => setDialogOpen(false)}
-                >
-                  Cancel
-                </Button>
-              </DialogClose>
-              <Button
-                variant="destructive"
-                className="flex items-center gap-2 hover:bg-red-700"
-                onClick={() => deleteMutation.mutate()}
-                disabled={deleteMutation.isPending || isOutOfStock}
-              >
-                {deleteMutation.isPending ? (
-                  <>
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    Deleting...
-                  </>
-                ) : (
-                  <>
-                    <Trash className="w-4 h-4" />
-                    Confirm
-                  </>
-                )}
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+        <p className="text-[26px] font-bold text-[#160804] mt-2">
+          ${product.price.toFixed(2)}
+        </p>
+        <Button
+          onClick={(e) => {
+            e.stopPropagation();
+            router.push(`/product/${product.id}`);
+          }}
+          className="w-[48px] h-[48px] flex items-center justify-center rounded-full shadow-none bg-[#FBFBFB] hover:bg-[#FBFBFB] transition !p-0"
+        >
+          <ForwardIcon className="!w-[48px] !h-[48px]" />
+        </Button>
       </CardFooter>
     </Card>
   );

@@ -48,6 +48,7 @@ export function ProductFormField({
               id={id}
               placeholder={placeholder}
               value={safeValue}
+              className="h-[96px]"
               onChange={(e) => onChange(e.target.value)}
             />
           ) : (
@@ -57,6 +58,7 @@ export function ProductFormField({
               type={type}
               placeholder={placeholder}
               value={safeValue}
+              className="!h-[52px] !text-[16px]"
               onChange={(e) =>
                 onChange(parseNumber ? Number(e.target.value) : e.target.value)
               }
