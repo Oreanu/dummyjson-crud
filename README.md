@@ -151,6 +151,6 @@ This project is licensed under the **MIT License**.
 ---
 
 ## Contact
-For any queries, reach out at olayemioreanu@gmail.com.
+For any queries, reach out at [olayemioreanu@gmail.com](mailto:olayemioreanu@gmail.com)
 ```
 
