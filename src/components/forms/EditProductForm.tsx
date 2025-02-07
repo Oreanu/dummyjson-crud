@@ -75,7 +75,7 @@ export default function EditProductForm({ ssrProduct, productId }: Props) {
 
   return (
     <div className="flex justify-center items-center h-screen">
-      <Card className="w-full max-w-xl px-2 py-0 !shadow-none !border-[var(--border-color)] !rounded-[32px] -mt-16 lg:-mt-8 overflow-hidden">
+      <Card className="w-full max-w-xl px-2 py-0 !shadow-none !border-[var(--border-color)] !rounded-[32px] -mt-16 lg:mt-24 overflow-hidden">
         <CardHeader className="flex items-center justify-between w-full !px-2 lg:!px-0">
           <div className="flex flex-col lg:flex-row items-center w-full">
             <div className="w-full lg:w-max">
