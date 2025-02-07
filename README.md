@@ -140,7 +140,6 @@ Before proceeding with the installation, ensure you have the following dependenc
 
 ## **1. Clone the Repository**
 To get started, clone the repository using Git:
-```sh
 git clone https://github.com/Oreanu/dummyjson-crud.git
 cd dummyjson-crud
 
@@ -152,5 +151,4 @@ This project is licensed under the **MIT License**.
 
 ## Contact
 For any queries, reach out at [olayemioreanu@gmail.com](mailto:olayemioreanu@gmail.com)
-```
 
