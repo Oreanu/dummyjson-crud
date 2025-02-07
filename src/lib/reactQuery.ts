@@ -1,5 +1,13 @@
 import { QueryClient, dehydrate, QueryKey } from "@tanstack/react-query";
 
+/**
+ * Prefetches data for React Query on the server.
+ * 
+ * @param queryKey - Unique key for the query.
+ * @param queryFn - Function that fetches the data.
+ * @param staleTime - Time before the query is considered stale (default: 5 minutes).
+ * @returns A dehydrated state of the query.
+ */
 export async function prefetchQueryData<T>({
   queryKey,
   queryFn,
@@ -11,11 +19,16 @@ export async function prefetchQueryData<T>({
 }) {
   const queryClient = new QueryClient();
 
-  await queryClient.prefetchQuery<T>({
-    queryKey,
-    queryFn,
-    staleTime,
-  });
+  try {
+    await queryClient.prefetchQuery({
+      queryKey,
+      queryFn,
+      staleTime,
+    });
 
-  return dehydrate(queryClient);
+    return dehydrate(queryClient);
+  } finally {
+    // Adding this here to prevent memory leaks
+    queryClient.clear(); 
+  }
 }

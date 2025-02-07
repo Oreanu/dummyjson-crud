@@ -1,21 +1,24 @@
 import { prefetchQueryData } from "@/lib/reactQuery";
 import { API_URL, fetchProductById } from "@/lib/api";
 import ProductDetails from "@/components/products/ProductDetails";
-import { HydrationBoundary } from "@tanstack/react-query";
 import { Metadata } from "next";
+import Hydrate from "@/lib/providers/Hydrate";
+import { Product } from "@/types/interface/product";
 
 interface ProductPageProps {
-  params: Promise<{ id: string }>;  
+  params: Promise<{ id: string }>;
 }
 
-export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
-  const { id } = await params; 
+export async function generateMetadata({
+  params,
+}: ProductPageProps): Promise<Metadata> {
+  const { id } = await params;
   const res = await fetch(`${API_URL}/${id}`);
-  
+
   if (!res.ok) {
     throw new Error(`Failed to fetch product: ${id}`);
   }
-  
+
   const product = await res.json();
 
   return {
@@ -25,16 +28,30 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {
-  const { id } = await params; 
-  
+  const { id } = await params;
+
   const dehydratedState = await prefetchQueryData({
     queryKey: ["product", id],
-    queryFn: async () => await fetchProductById(id),
+    queryFn: () => fetchProductById(id),
   });
 
+  let product: Product | null = null;
+  try {
+    product = await fetchProductById(id);
+  } catch (error) {
+    console.error("Failed to fetch product:", error);
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <p className="text-red-500 text-center">
+          Error loading product details. Please try again.
+        </p>
+      </div>
+    );
+  }
+
   return (
-    <HydrationBoundary state={dehydratedState}>
-      <ProductDetails productId={id} />
-    </HydrationBoundary>
+    <Hydrate state={dehydratedState}>
+      <ProductDetails product={product} />
+    </Hydrate>
   );
 }

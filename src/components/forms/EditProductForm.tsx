@@ -1,46 +1,45 @@
 "use client";
 
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
-import { useForm, FieldValues } from "react-hook-form";
-import { updateProduct } from "@/lib/api";
-import { Product } from "@/types/interface/product";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useEditProduct } from "@/hooks/useEditProduct";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardHeader, } from "@/components/ui/card";
-import { ArrowLeft, Loader2 } from "lucide-react";
+import { Card, CardHeader, CardContent } from "@/components/ui/card";
+import { Loader2, ArrowLeft } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { productSchema, ProductFormData } from "@/types/schema/validationSchema";
+import { ProductFormField } from "@/components/forms/ProductFormField";
+import { Product } from "@/types/interface/product";
 
 interface Props {
   product: Product;
 }
 
 export default function EditProductForm({ product }: Props) {
+  const router = useRouter();
+  const mutation = useEditProduct(product.id, () => reset());
+
   const {
-    register,
+    control,
     handleSubmit,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm<FieldValues>({
+  } = useForm<ProductFormData>({
+    resolver: zodResolver(productSchema),
     defaultValues: product,
   });
 
-  const router = useRouter();
-  const queryClient = useQueryClient();
-
-  const mutation = useMutation({
-    mutationFn: async (updatedData: Partial<Product>) =>
-      updateProduct({ id: String(product.id), updatedData }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["products"] });
-      reset();
-      router.push("/");
-    },
-  });
+  const onSubmit = async (updatedData: ProductFormData) => {
+    try {
+      await mutation.mutateAsync(updatedData);
+    } catch (error) {
+      console.error("Failed to update product:", error);
+    }
+  };
 
   return (
     <div className="flex justify-center items-center h-screen">
-      <Card className="w-full max-w-xl p-6 -mt-16">
+      <Card className="w-full max-w-lg px-2 py-0 shadow-md -mt-16">
         <CardHeader className="flex items-center justify-between">
           <div className="w-full">
             <Button
@@ -58,71 +57,59 @@ export default function EditProductForm({ product }: Props) {
         </CardHeader>
 
         <CardContent>
-          <form
-            onSubmit={handleSubmit((updatedData) =>
-              mutation.mutate(updatedData)
-            )}
-            className="space-y-4"
-          >
-            <div>
-              <Label htmlFor="title">Title</Label>
-              <Input
-                id="title"
-                {...register("title", { required: "Title is required" })}
-                placeholder="Enter title"
-              />
-              {errors.title?.message && (
-                <p className="text-red-500 text-sm">
-                  {String(errors.title?.message)}
-                </p>
-              )}
-            </div>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <ProductFormField
+              label="Title"
+              id="title"
+              control={control}
+              rules={{ required: "Title is required" }}
+              placeholder="Enter product title"
+              error={errors.title?.message}
+            />
 
-            <div>
-              <Label htmlFor="description">Description</Label>
-              <Input
-                id="description"
-                {...register("description")}
-                placeholder="Enter description"
-              />
-            </div>
+            <ProductFormField
+              label="Description"
+              id="description"
+              control={control}
+              placeholder="Enter product description"
+              error={errors.description?.message}
+              isTextarea
+            />
 
-            <div>
-              <Label htmlFor="price">Price</Label>
-              <Input
-                id="price"
-                type="number"
-                {...register("price", { required: "Price is required" })}
-                placeholder="Enter price"
-              />
-              {errors.price?.message && (
-                <p className="text-red-500 text-sm">
-                  {String(errors.price?.message)}
-                </p>
-              )}
-            </div>
+            <ProductFormField
+              label="Price"
+              id="price"
+              control={control}
+              type="number"
+              placeholder="Enter product price"
+              error={errors.price?.message}
+              parseNumber
+            />
 
-            <div>
-              <Label htmlFor="thumbnail">Image URL</Label>
-              <Input
-                id="thumbnail"
-                {...register("thumbnail")}
-                placeholder="Enter image URL"
-              />
-            </div>
+            <ProductFormField
+              label="Stock"
+              id="stock"
+              control={control}
+              type="number"
+              placeholder="Enter stock quantity"
+              error={errors.stock?.message}
+              parseNumber
+            />
 
-            {mutation.isError && (
-              <p className="text-red-500">
-                Error updating product. Please try again.
-              </p>
-            )}
+            <ProductFormField
+              label="Image URL"
+              id="thumbnail"
+              control={control}
+              placeholder="Enter product image URL"
+              error={errors.thumbnail?.message}
+            />
 
             <Button
               type="submit"
-              className="w-full"
-              disabled={isSubmitting || mutation.status === "pending"}
+              className="w-full h-10"
+              disabled={isSubmitting || mutation.isPending}
             >
-              {mutation.status === "pending" ? (
+              {mutation.isPending ? (
                 <span className="flex items-center gap-2">
                   <Loader2 className="animate-spin w-4 h-4" />
                   Updating...
