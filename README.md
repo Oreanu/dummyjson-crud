@@ -144,6 +144,10 @@ git clone https://github.com/Oreanu/dummyjson-crud.git
 cd dummyjson-crud
 
 
+## Sample Test Image (Restricted due to Next.js Image Optimization)
+https://img.freepik.com/free-photo/pretzels-chips-crackers-popcorn-bowls_114579-6490.jpg
+
+
 ## License
 This project is licensed under the **MIT License**.
 
