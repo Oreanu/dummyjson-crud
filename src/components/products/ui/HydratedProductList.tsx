@@ -31,10 +31,10 @@ export default function HydratedProductList({ ssrProducts }: Props) {
   return (
     <section className="mx-auto py-10 font-sofia-pro">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold tracking-tight text-gray-900">Products</h1>
+        <h1 className="text-xl lg:text-3xl font-bold tracking-tight text-gray-900">Products</h1>
         <Link
           href="/product/create"
-          className="bg-[var(--orange-color-prep)] text-white px-4 py-2 rounded-md transition-all"
+          className="bg-[var(--orange-color-prep)] !text-[14px] lg:!text-[16px] text-white px-4 py-2 rounded-md transition-all"
         >
           + Add Product
         </Link>

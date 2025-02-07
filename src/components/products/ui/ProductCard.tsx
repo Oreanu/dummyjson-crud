@@ -53,7 +53,7 @@ export function ProductCard({ product }: { product: Product }) {
         <div className="flex justify-between items-start w-full !pr-4">
           <Badge
             variant="outline"
-            className="bg-[var(--success-color)] !shadow-none text-white px-3 py-1 !rounded-t-[23px] !rounded-l-[0px] !border-0 !rounded-r-[23px] !rounded-b-[23px] !h-[32px] !text-[12px] uppercase sticky z-10"
+            className="bg-[var(--success-color)] !shadow-none text-white px-3 py-1 !rounded-t-[23px] !rounded-l-[0px] !border-0 !rounded-r-[23px] !rounded-b-[23px] !h-[32px] !text-[10px] lg:!text-[12px] uppercase sticky z-10"
           >
             {isOutOfStock ? "Out of Stock" : "In Stock"}
           </Badge>
@@ -63,18 +63,18 @@ export function ProductCard({ product }: { product: Product }) {
                 e.stopPropagation();
                 router.push(`/product/edit/${product.id}`);
               }}
-              className="w-[48px] h-[48px] flex items-center justify-center rounded-full shadow-none bg-[#FBFBFB] hover:bg-[#FBFBFB] transition !p-0"
+              className="h-[36px] w-[36px] lg:w-[48px] lg:h-[48px] flex items-center justify-center rounded-full shadow-none bg-[#FBFBFB] hover:bg-[#FBFBFB] transition !p-0"
             >
-              <EditIcon className="!w-[48px] !h-[48px]" />
+              <EditIcon className="!h-[36px] !w-[36px]  lg:!w-[48px] lg:!h-[48px]" />
             </Button>
 
             <Dialog open={isDialogOpen} onOpenChange={setDialogOpen}>
               <DialogTrigger asChild>
                 <Button
                   onClick={(e) => e.stopPropagation()}
-                  className="w-[48px] h-[48px] flex items-center justify-center bg-[#FBFBFB] hover:bg-[#FBFBFB] shadow-none rounded-full transition !p-0"
+                  className="h-[36px] w-[36px] lg:w-[48px] lg:h-[48px] flex items-center justify-center bg-[#FBFBFB] hover:bg-[#FBFBFB] shadow-none rounded-full transition !p-0"
                 >
-                  <DeleteIcon className="!w-[48px] !h-[48px]" />
+                  <DeleteIcon className="!h-[36px] !w-[36px]  lg:!w-[48px] lg:!h-[48px]" />
                 </Button>
               </DialogTrigger>
               <DialogContent className="p-6">
@@ -119,17 +119,17 @@ export function ProductCard({ product }: { product: Product }) {
       </CardHeader>
 
       <CardContent className="p-4 bg-white sticky z-10">
-        <h3 className="text-lg font-semibold text-[var(--orange-color-prep)]  uppercase">
+        <h3 className="text-sm lg:text-lg font-semibold text-[var(--orange-color-prep)] uppercase truncate whitespace-nowrap overflow-hidden text-ellipsis">
           {product.title}
         </h3>
-        <p className="text-sm mt-1 text-[#5C5C5C] font-thin">
+        <p className="text-xs lg:text-sm mt-1 text-[#5C5C5C] font-thin">
           {product.description.substring(0, 50)}...
         </p>
         <div className="h-[1px] w-full bg-[#F0F0F0] mt-4"></div>
       </CardContent>
 
       <CardFooter className="flex justify-between px-4 pb-4 items-center">
-        <p className="text-[26px] font-bold text-[#160804] mt-2">
+        <p className="text-[20px] lg:text-[26px] font-bold text-[#160804] mt-2">
           ${product.price.toFixed(2)}
         </p>
         <Button
@@ -137,9 +137,9 @@ export function ProductCard({ product }: { product: Product }) {
             e.stopPropagation();
             router.push(`/product/${product.id}`);
           }}
-          className="w-[48px] h-[48px] flex items-center justify-center rounded-full shadow-none bg-[#FBFBFB] hover:bg-[#FBFBFB] transition !p-0"
+          className="h-[36px] w-[36px] lg:w-[48px] lg:h-[48px] flex items-center justify-center rounded-full shadow-none bg-[#FBFBFB] hover:bg-[#FBFBFB] transition !p-0"
         >
-          <ForwardIcon className="!w-[48px] !h-[48px]" />
+          <ForwardIcon className="!h-[36px] !w-[36px]  lg:!w-[48px] lg:!h-[48px]" />
         </Button>
       </CardFooter>
     </Card>

@@ -25,12 +25,10 @@ export default function EditProductForm({ ssrProduct, productId }: Props) {
   const storedProduct = useProductStore((state) => state.selectedProduct);
   const storedProducts = useProductStore((state) => state.products);
 
-  // Ensure Zustand has the latest product data
   useEffect(() => {
     setHydrated(true);
   }, []);
 
-  // 🏆 **Fix: Use useMemo to ensure product is always defined**
   const product = useMemo(() => {
     if (productId) {
       return storedProducts.find((p) => p.id === Number(productId)) || storedProduct || ssrProduct || null;
@@ -38,7 +36,6 @@ export default function EditProductForm({ ssrProduct, productId }: Props) {
     return storedProduct || ssrProduct || null;
   }, [productId, storedProducts, storedProduct, ssrProduct]);
 
-  // 🚀 **Ensure hooks are always called**
   const mutation = useEditProduct(product?.id ?? "", () => reset());
 
   const {
@@ -58,7 +55,6 @@ export default function EditProductForm({ ssrProduct, productId }: Props) {
     }
   }, [hydrated, product, reset]);
 
-  // 🚨 **Prevent hooks from skipping if product is not found**
   if (!product) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -78,9 +74,9 @@ export default function EditProductForm({ ssrProduct, productId }: Props) {
   };
 
   return (
-    <div className="flex justify-center items-center lg:h-screen">
-      <Card className="w-full max-w-xl px-2 py-0 !shadow-none !border-[var(--border-color)] !rounded-[32px] mt-8 lg:mt-4">
-        <CardHeader className="flex items-center justify-between w-full !px-0">
+    <div className="flex justify-center items-center h-screen">
+      <Card className="w-full max-w-xl px-2 py-0 !shadow-none !border-[var(--border-color)] !rounded-[32px] -mt-16 lg:-mt-8 overflow-hidden">
+        <CardHeader className="flex items-center justify-between w-full !px-2 lg:!px-0">
           <div className="flex flex-col lg:flex-row items-center w-full">
             <div className="w-full lg:w-max">
               <Button
@@ -96,7 +92,7 @@ export default function EditProductForm({ ssrProduct, productId }: Props) {
           </div>
         </CardHeader>
 
-        <CardContent>
+        <CardContent className="!px-2">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <ProductFormField
               label="Title"

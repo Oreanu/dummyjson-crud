@@ -43,10 +43,10 @@ export default function AddProductForm() {
   };
 
   return (
-    <div className="flex justify-center items-center lg:max-h-screen">
-      <Card className="w-full max-w-xl px-2 py-0 !shadow-none !border-[var(--border-color)] !border-[1px] !rounded-[32px] mt-8">
+    <div className="flex justify-center items-center h-screen max-h-screen">
+      <Card className="w-full max-w-xl px-2 py-0 !shadow-none !border-[var(--border-color)] !border-[1px] !rounded-[32px] -mt-32 lg:mt-8 overflow-hidden">
         
-        <CardHeader className="flex items-center justify-between w-full !px-0">
+        <CardHeader className="flex items-center justify-between w-full px-2 lg:!px-0">
           <div className="flex flex-col lg:flex-row items-center w-full">
             <div className="w-full lg:w-max">
               <Button
@@ -62,7 +62,7 @@ export default function AddProductForm() {
           </div>
         </CardHeader>
 
-        <CardContent>
+        <CardContent className="!px-2">
           <form
             onSubmit={(e) => {
               handleSubmit((data) => {

@@ -75,9 +75,8 @@ export default function ProductDetails({ ssrProduct, productId }: Props) {
 
   return (
     <div className="flex justify-center items-center min-h-screen py-6 px-0 lg:p-6">
-      <Card className="w-full max-w-2xl px-2 lg:px-6 lg:py-4 !shadow-none border border-[var(--border-color)] bg-white !rounded-[20px] lg:!rounded-[32px]">
-        {/* Product Header */}
-        <CardHeader className="flex items-center justify-between border-b w-full !px-0 bg-white z-10 sticky pt-4 ">
+      <Card className="w-full max-w-2xl px-2 lg:px-6 lg:py-4 !shadow-none border border-[var(--border-color)] bg-white !rounded-[20px] lg:!rounded-[32px] overflow-hidden">
+        <CardHeader className="flex items-center justify-between border-b w-full !px-2 lg:!px-0 bg-white z-10 sticky pt-4 ">
           <div className="flex flex-col lg:flex-row items-center w-full">
             <div className="w-full lg:w-max mb-4 lg:mb-0">
               <Button
@@ -93,7 +92,6 @@ export default function ProductDetails({ ssrProduct, productId }: Props) {
           </div>
         </CardHeader>
 
-        {/* Product Content */}
         <CardContent className="space-y-4 ">
           <div className="relative w-full h-[300px] flex justify-center items-center">
             <OptimizedImage
@@ -111,7 +109,6 @@ export default function ProductDetails({ ssrProduct, productId }: Props) {
             </p>
           </div>
 
-          {/* Product Information */}
           <div className="grid grid-cols-2 gap-4 text-gray-800 text-sm font-medium border-t pt-4">
             <p>
               <span className="font-bold">Brand:</span>{" "}
@@ -146,7 +143,6 @@ export default function ProductDetails({ ssrProduct, productId }: Props) {
             </p>
           </div>
 
-          {/* Price */}
           <div className="flex justify-between items-center mt-4">
             <span className="text-3xl font-bold text-[#FD5319]">
               ${product.price?.toFixed(2) || "N/A"}
@@ -154,8 +150,7 @@ export default function ProductDetails({ ssrProduct, productId }: Props) {
           </div>
         </CardContent>
 
-        {/* Product Actions */}
-        <CardFooter className="flex justify-between border-t pt-4 px-0 gap-4">
+        <CardFooter className="flex justify-between border-t pt-4 px-4 lg:px-0 gap-4">
           <Button
             className="flex items-center gap-2 px-4 py-2 text-white rounded-lg w-full !h-[52px] !mt-4 !text-[16px]"
             onClick={() => router.push(`/product/edit/${product.id}`)}
