@@ -1,9 +1,10 @@
 import { prefetchQueryData } from "@/lib/reactQuery";
 import { API_URL, fetchProductById } from "@/lib/api";
-import ProductDetails from "@/components/products/ProductDetails";
+import ProductDetails from "@/components/products/ui/ProductDetails";
 import { Metadata } from "next";
 import Hydrate from "@/lib/providers/Hydrate";
 import { Product } from "@/types/interface/product";
+import PersistProductDetails from "@/components/products/zustand/PersistProductDetails";
 
 interface ProductPageProps {
   params: Promise<{ id: string }>;
@@ -13,6 +14,13 @@ export async function generateMetadata({
   params,
 }: ProductPageProps): Promise<Metadata> {
   const { id } = await params;
+
+  if (Number(id) > 1000){
+    return {
+      title: `Local Post - DummyJSONCRUD`,
+      description: "This is a local post",
+    };
+  }
   const res = await fetch(`${API_URL}/${id}`);
 
   if (!res.ok) {
@@ -30,6 +38,13 @@ export async function generateMetadata({
 export default async function ProductPage({ params }: ProductPageProps) {
   const { id } = await params;
 
+  //Here we ignore ssr becasue it doesn't exist on the server: In a real world app, we won't need to hande this edge case as dummy api is just simulating api calls and not storing data on the server
+  if (Number(id) > 1000){
+    return (
+      <ProductDetails productId={id} />
+    );
+  }
+  
   const dehydratedState = await prefetchQueryData({
     queryKey: ["product", id],
     queryFn: () => fetchProductById(id),
@@ -51,7 +66,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   return (
     <Hydrate state={dehydratedState}>
-      <ProductDetails product={product} />
-    </Hydrate>
+    <ProductDetails ssrProduct={product} />
+    <PersistProductDetails product={product} />
+  </Hydrate>
   );
 }

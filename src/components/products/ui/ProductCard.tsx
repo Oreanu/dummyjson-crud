@@ -20,7 +20,7 @@ import {
 import { Product } from "@/types/interface/product";
 import { Badge } from "@/components/ui/badge";
 import React from "react";
-import OptimizedImage from "../OptimizedImage";
+import OptimizedImage from "../../OptimizedImage";
 import EditIcon from "@/components/svgs/EditIcon";
 import DeleteIcon from "@/components/svgs/DeleteIcon";
 import ForwardIcon from "@/components/svgs/ForwardIcon";
@@ -107,7 +107,7 @@ export function ProductCard({ product }: { product: Product }) {
             </Dialog>
           </div>
         </div>
-        <div className="relative w-full h-[350px] flex justify-center items-center">
+        <div className="relative w-full h-[300px] flex justify-center items-center ">
           <OptimizedImage
             src={product.thumbnail}
             alt={product.title}
@@ -118,7 +118,7 @@ export function ProductCard({ product }: { product: Product }) {
         </div>
       </CardHeader>
 
-      <CardContent className="p-4">
+      <CardContent className="p-4 bg-white sticky z-10">
         <h3 className="text-lg font-semibold text-[var(--orange-color-prep)]  uppercase">
           {product.title}
         </h3>

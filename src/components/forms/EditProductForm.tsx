@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEditProduct } from "@/hooks/useEditProduct";
@@ -7,21 +8,38 @@ import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import {
-  productSchema,
-  ProductFormData,
-} from "@/types/schema/validationSchema";
+import { productSchema, ProductFormData } from "@/types/schema/validationSchema";
 import { ProductFormField } from "@/components/forms/ProductFormField";
+import { useProductStore } from "@/state/useProductStore";
 import { Product } from "@/types/interface/product";
 import BackIcon from "@/components/svgs/BackIcon";
 
 interface Props {
-  product: Product;
+  ssrProduct?: Product | null;
+  productId?: string;
 }
 
-export default function EditProductForm({ product }: Props) {
+export default function EditProductForm({ ssrProduct, productId }: Props) {
   const router = useRouter();
-  const mutation = useEditProduct(product.id, () => reset());
+  const [hydrated, setHydrated] = useState(false);
+  const storedProduct = useProductStore((state) => state.selectedProduct);
+  const storedProducts = useProductStore((state) => state.products);
+
+  // Ensure Zustand has the latest product data
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
+
+  // 🏆 **Fix: Use useMemo to ensure product is always defined**
+  const product = useMemo(() => {
+    if (productId) {
+      return storedProducts.find((p) => p.id === Number(productId)) || storedProduct || ssrProduct || null;
+    }
+    return storedProduct || ssrProduct || null;
+  }, [productId, storedProducts, storedProduct, ssrProduct]);
+
+  // 🚀 **Ensure hooks are always called**
+  const mutation = useEditProduct(product?.id ?? "", () => reset());
 
   const {
     control,
@@ -30,8 +48,26 @@ export default function EditProductForm({ product }: Props) {
     formState: { errors, isSubmitting },
   } = useForm<ProductFormData>({
     resolver: zodResolver(productSchema),
-    defaultValues: product,
+    defaultValues: product ?? {}, // Ensure form gets a default value even if product is null
   });
+
+  // Reset form when Zustand updates the product or hydration completes
+  useEffect(() => {
+    if (hydrated && product) {
+      reset(product);
+    }
+  }, [hydrated, product, reset]);
+
+  // 🚨 **Prevent hooks from skipping if product is not found**
+  if (!product) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <p className="text-red-500 text-center text-xl font-semibold">
+          Product not found.
+        </p>
+      </div>
+    );
+  }
 
   const onSubmit = async (updatedData: ProductFormData) => {
     try {
@@ -51,7 +87,7 @@ export default function EditProductForm({ product }: Props) {
                 onClick={() => router.back()}
                 className="h-[32px] w-[32px] lg:w-[40px] lg:h-[40px] flex items-center justify-center rounded-full shadow-none bg-[#FBFBFB] hover:bg-[#FBFBFB] transition !p-0"
               >
-                <BackIcon className="!h-[32px] !w-[32px] lg:!w-[40px] lg:!h-[40px] " />
+                <BackIcon className="!h-[32px] !w-[32px] lg:!w-[40px] lg:!h-[40px]" />
               </Button>
             </div>
             <h2 className="text-[24px] lg:text-[34px] leading-snug pt-2 font-bold text-center flex-1">

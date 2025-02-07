@@ -3,10 +3,10 @@
 import { HydrationBoundary, DehydratedState } from "@tanstack/react-query";
 
 interface Props {
-  state: DehydratedState;
+  state?: DehydratedState; 
   children: React.ReactNode;
 }
 
-export default function Hydrate({ state, children }: Props) {
+export default function Hydrate({ state = { mutations: [], queries: [] }, children }: Props) {
   return <HydrationBoundary state={state}>{children}</HydrationBoundary>;
 }

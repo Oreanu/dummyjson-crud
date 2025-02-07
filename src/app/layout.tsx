@@ -1,8 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
-import { TanstackProvider } from "@/lib/providers/tanstack-provider";
 import Navbar from "@/components/Navbar";
 import { Toaster } from "sonner";
+import { TanstackProvider } from "@/lib/providers/TanstackProvider";
+import { ZustandProvider } from "@/lib/providers/ZustandProvider";
 
 const sofiaPro = {
   variable: "--font-sofia-pro",
@@ -80,11 +81,13 @@ export default function RootLayout({
         suppressHydrationWarning={true}
       >
         <TanstackProvider>
-          <Toaster position="top-right" />
-          <Navbar />
-          <div className="py-16 h-screen overflow-y-auto px-[7%]">
-            {children}
-          </div>
+          <ZustandProvider> 
+            <Toaster position="top-right" />
+            <Navbar />
+            <div className="py-16 h-screen overflow-y-auto px-[7%]">
+              {children}
+            </div>
+          </ZustandProvider>
         </TanstackProvider>
       </body>
     </html>

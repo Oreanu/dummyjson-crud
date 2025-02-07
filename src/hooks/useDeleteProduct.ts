@@ -1,23 +1,30 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { deleteProduct } from "@/lib/api";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { useProductStore } from "@/state/useProductStore";
 
 export function useDeleteProduct(
-  productId: string | number,
+  productId: number | string,
   options?: { redirect?: boolean; onSuccessCallback?: () => void }
 ) {
-  const queryClient = useQueryClient();
   const router = useRouter();
+  const deleteProductFromStore = useProductStore((state) => state.deleteProduct);
 
   return useMutation({
-    mutationFn: async () => deleteProduct(productId),
+    mutationFn: async () => {
+      if (typeof productId === "number" && productId > 1000) {
+        console.warn(`Skipping API call for productId: ${productId}`);
+        return null; // Prevent API call
+      }
+      return deleteProduct(productId);
+    },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["products"] });
+      deleteProductFromStore(productId); // Persist deletion
       toast.success("Product deleted successfully!");
 
       if (options?.onSuccessCallback) {
-        options.onSuccessCallback(); 
+        options.onSuccessCallback();
       }
 
       if (options?.redirect) {
