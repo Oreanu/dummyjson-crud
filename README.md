@@ -1,9 +1,11 @@
 # DummyJSON CRUD Application
 
-## Overview
-This repository contains a **Next.js** application that I built using the [DummyJSON API](https://dummyjson.com/docs/products). This project assessed my frontend skills, including **state management**, **server-side rendering (SSR)**, **client-side rendering (CSR)**, and the use of **React hooks**.
+![Screenshot 2025-02-07 at 16 56 38](https://github.com/user-attachments/assets/9dc80300-a21b-4560-be33-d7fb40742258)
 
-The application provides an intuitive user interface to interact with products from the DummyJSON API. I implemented features allowing users to **view, add, update, and delete products**, leveraging dynamic data fetching and state management techniques.
+## Overview
+This repository contains a **Next.js** application that I built using the [DummyJSON API](https://dummyjson.com/docs/products). It addresses several topics including **state management**, **server-side rendering (SSR)**, **client-side rendering (CSR)**, and the use of **React hooks**.
+
+The application provides an intuitive user interface from the DummyJSON API for interacting with products. I implemented features allowing users to **view, add, update, and delete products**, leveraging dynamic data fetching and state management techniques.
 
 ---
 
