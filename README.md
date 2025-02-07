@@ -1,6 +1,6 @@
 # DummyJSON CRUD Application
 
-![Screenshot 2025-02-07 at 16 56 38](https://github.com/user-attachments/assets/9dc80300-a21b-4560-be33-d7fb40742258)
+<img width="718" alt="Screenshot 2025-02-07 at 16 59 36" src="https://github.com/user-attachments/assets/649ab088-f3dc-447a-b339-08b7d76a1a9a" />
 
 ## Overview
 This repository contains a **Next.js** application that I built using the [DummyJSON API](https://dummyjson.com/docs/products). It addresses several topics including **state management**, **server-side rendering (SSR)**, **client-side rendering (CSR)**, and the use of **React hooks**.
