@@ -2,6 +2,15 @@
 
 <img width="718" alt="Screenshot 2025-02-07 at 16 59 36" src="https://github.com/user-attachments/assets/649ab088-f3dc-447a-b339-08b7d76a1a9a" />
 
+![Screenshot 2025-02-07 at 16 56 38](https://github.com/user-attachments/assets/8398e888-05ca-43ff-8090-0e3867325f1e)
+
+<img width="1423" alt="Screenshot 2025-02-07 at 17 01 04" src="https://github.com/user-attachments/assets/7a1cb579-2ee8-4682-a11d-e473ddd03781" />
+
+<img width="1433" alt="Screenshot 2025-02-07 at 17 01 15" src="https://github.com/user-attachments/assets/4f793d38-cfe4-458b-966e-4300342bec4e" />
+
+<img width="1433" alt="Screenshot 2025-02-07 at 17 01 57" src="https://github.com/user-attachments/assets/a94612e7-733e-4975-b8f1-65aae9b18e5e" />
+
+
 ## Overview
 This repository contains a **Next.js** application that I built using the [DummyJSON API](https://dummyjson.com/docs/products). It addresses several topics including **state management**, **server-side rendering (SSR)**, **client-side rendering (CSR)**, and the use of **React hooks**.
 
